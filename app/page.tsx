@@ -1,335 +1,154 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Brain, Leaf, Heart, ArrowRight } from 'lucide-react'
-import Image from "next/image"
-import Link from "next/link"
-import { AnimatedSection } from "@/components/animated-section"
-import { StaggeredGrid } from "@/components/staggered-grid"
+'use client'
 
-export default function JoyCardsLanding() {
+import { useState, useEffect } from 'react'
+import { Button } from "@/components/ui/button"
+import { Menu, X } from 'lucide-react'
+import HomePage from '@/components/pages/home-page'
+import ProductsPage from '@/components/pages/products-page'
+import AboutPage from '@/components/pages/about-page'
+import ContactPage from '@/components/pages/contact-page'
+
+type TabType = 'home' | 'products' | 'about' | 'contact'
+
+export default function JoyCardsWebsite() {
+  const [activeTab, setActiveTab] = useState<TabType>('home')
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const tabs = [
+    { id: 'home' as TabType, label: 'Home' },
+    { id: 'products' as TabType, label: 'Products' },
+    { id: 'about' as TabType, label: 'About' },
+    { id: 'contact' as TabType, label: 'Contact' },
+  ]
+
+  const handleTabChange = (newTab: TabType) => {
+    if (newTab === activeTab) return
+    
+    setIsTransitioning(true)
+    setIsMobileMenuOpen(false)
+    
+    setTimeout(() => {
+      setActiveTab(newTab)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      
+      // Update URL without page reload
+      window.history.pushState({}, '', `#${newTab}`)
+      
+      setTimeout(() => {
+        setIsTransitioning(false)
+      }, 150)
+    }, 150)
+  }
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const hash = window.location.hash.slice(1) as TabType
+      if (hash && tabs.some(tab => tab.id === hash)) {
+        setActiveTab(hash)
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    
+    // Set initial tab from URL
+    const initialHash = window.location.hash.slice(1) as TabType
+    if (initialHash && tabs.some(tab => tab.id === initialHash)) {
+      setActiveTab(initialHash)
+    }
+
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'home':
+        return <HomePage />
+      case 'products':
+        return <ProductsPage />
+      case 'about':
+        return <AboutPage />
+      case 'contact':
+        return <ContactPage />
+      default:
+        return <HomePage />
+    }
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="w-full py-4 px-6">
+      <header className="w-full py-4 px-6 sticky top-0 bg-white/80 backdrop-blur-md z-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex-1" />
-          <div className="flex items-center space-x-12">
-            <Link href="#" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
-              Products
-            </Link>
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2"
+            >
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
+
+          {/* Logo */}
+          <div className="flex-1 md:flex-none text-center md:text-left">
             <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
               JoyCards
             </h1>
-            <Link href="#" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
-              About
-            </Link>
-            <Link href="#" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors">
-              Contact
-            </Link>
           </div>
-          <div className="flex-1 flex justify-end">
-            <Button 
-              variant="outline" 
-              className="rounded-full px-6 py-2 text-sm font-medium border-gray-300 hover:bg-gray-50"
-            >
-              Coming Soon
-            </Button>
-          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-12">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => handleTabChange(tab.id)}
+                className={`relative text-sm font-medium transition-colors duration-200 py-2 ${
+                  activeTab === tab.id
+                    ? 'text-[#007AFF]'
+                    : 'text-gray-900 hover:text-gray-600'
+                }`}
+              >
+                {tab.label}
+                {activeTab === tab.id && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#007AFF] rounded-full transition-all duration-300" />
+                )}
+              </button>
+            ))}
+          </nav>
+
+          <div className="flex-1 md:flex-none" />
         </div>
+
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-100 shadow-lg">
+            <nav className="flex flex-col py-4">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => handleTabChange(tab.id)}
+                  className={`text-left px-6 py-3 text-sm font-medium transition-colors duration-200 ${
+                    activeTab === tab.id
+                      ? 'text-[#007AFF] bg-blue-50'
+                      : 'text-gray-900 hover:bg-gray-50'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        )}
       </header>
 
-      {/* Hero Section */}
-      <section className="w-full py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <AnimatedSection animation="fadeIn" duration={1}>
-            <h2 className="text-6xl md:text-7xl font-bold text-gray-900 tracking-tight leading-none mb-6">
-              Meet the JoyCards Collection.
-            </h2>
-          </AnimatedSection>
-          
-          <AnimatedSection animation="slideUp" delay={0.2}>
-            <p className="text-2xl text-gray-600 mb-16 font-light">
-              Designed to spread positivity.
-            </p>
-          </AnimatedSection>
-          
-          {/* Hero Product Showcase */}
-          <AnimatedSection animation="scaleIn" delay={0.4}>
-            <div className="relative mb-16">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-2xl mx-auto">
-                <div className="transform rotate-3 hover:rotate-6 transition-transform duration-300">
-                  <div className="bg-gradient-to-br from-red-100 to-red-200 rounded-2xl p-8 shadow-2xl aspect-[3/4]">
-                    <Image
-                      src="/placeholder-yahqy.png"
-                      alt="Holiday Card"
-                      width={200}
-                      height={300}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  </div>
-                </div>
-                <div className="transform -rotate-2 hover:rotate-1 transition-transform duration-300 md:mt-8">
-                  <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-2xl p-8 shadow-2xl aspect-[3/4]">
-                    <Image
-                      src="/thanksgiving-greeting-card.png"
-                      alt="Thanksgiving Card"
-                      width={200}
-                      height={300}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  </div>
-                </div>
-                <div className="transform rotate-1 hover:-rotate-2 transition-transform duration-300 col-span-2 md:col-span-1">
-                  <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl p-8 shadow-2xl aspect-[3/4]">
-                    <Image
-                      src="/new-year-greeting-card.png"
-                      alt="New Year Card"
-                      width={200}
-                      height={300}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection animation="slideUp" delay={0.6}>
-            <p className="text-lg text-gray-500 mb-8 font-light">
-              Coming Fall 2024
-            </p>
-          </AnimatedSection>
-          
-          <AnimatedSection animation="slideUp" delay={0.8}>
-            <Button 
-              className="bg-[#007AFF] hover:bg-[#0056CC] text-white rounded-full px-8 py-3 text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-200"
-            >
-              Get Notified
-            </Button>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* Product Showcase */}
-      <section className="w-full py-32 px-6 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <AnimatedSection animation="slideUp">
-            <h3 className="text-5xl font-bold text-gray-900 text-center mb-20 tracking-tight">
-              Holiday Collections
-            </h3>
-          </AnimatedSection>
-          
-          <StaggeredGrid 
-            className="grid grid-cols-1 md:grid-cols-2 gap-16"
-            staggerDelay={0.15}
-          >
-            {/* Back to School Collection */}
-            <div className="group cursor-pointer">
-              <div className="bg-white rounded-3xl p-12 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div className="aspect-[4/3] mb-8 relative overflow-hidden rounded-2xl">
-                  <Image
-                    src="/placeholder-66bzc.png"
-                    alt="Back to School Collection"
-                    width={400}
-                    height={300}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h4 className="text-2xl font-semibold text-gray-900 mb-4">
-                  Back to School Collection
-                </h4>
-                <p className="text-lg text-gray-600 mb-6 font-light">
-                  Begin with confidence.
-                </p>
-                <Link href="#" className="inline-flex items-center text-[#007AFF] font-medium hover:underline">
-                  Learn more <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Thanksgiving Collection */}
-            <div className="group cursor-pointer">
-              <div className="bg-white rounded-3xl p-12 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 relative">
-                <div className="absolute top-6 right-6 bg-[#007AFF] text-white px-3 py-1 rounded-full text-sm font-medium">
-                  New
-                </div>
-                <div className="aspect-[4/3] mb-8 relative overflow-hidden rounded-2xl">
-                  <Image
-                    src="/thanksgiving-autumn-cards.png"
-                    alt="Thanksgiving Collection"
-                    width={400}
-                    height={300}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h4 className="text-2xl font-semibold text-gray-900 mb-4">
-                  Thanksgiving Collection
-                </h4>
-                <p className="text-lg text-gray-600 mb-6 font-light">
-                  Gratitude. Amplified.
-                </p>
-                <Link href="#" className="inline-flex items-center text-[#007AFF] font-medium hover:underline">
-                  Learn more <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Holiday Collection */}
-            <div className="group cursor-pointer">
-              <div className="bg-white rounded-3xl p-12 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div className="aspect-[4/3] mb-8 relative overflow-hidden rounded-2xl">
-                  <Image
-                    src="/christmas-greeting-cards.png"
-                    alt="Holiday Collection"
-                    width={400}
-                    height={300}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h4 className="text-2xl font-semibold text-gray-900 mb-4">
-                  Holiday Collection
-                </h4>
-                <p className="text-lg text-gray-600 mb-6 font-light">
-                  Joy. Designed beautiful.
-                </p>
-                <Link href="#" className="inline-flex items-center text-[#007AFF] font-medium hover:underline">
-                  Learn more <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-
-            {/* New Year Collection */}
-            <div className="group cursor-pointer">
-              <div className="bg-white rounded-3xl p-12 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                <div className="aspect-[4/3] mb-8 relative overflow-hidden rounded-2xl">
-                  <Image
-                    src="/placeholder-d9squ.png"
-                    alt="New Year Collection"
-                    width={400}
-                    height={300}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h4 className="text-2xl font-semibold text-gray-900 mb-4">
-                  New Year Collection
-                </h4>
-                <p className="text-lg text-gray-600 mb-6 font-light">
-                  Fresh starts. Bold dreams.
-                </p>
-                <Link href="#" className="inline-flex items-center text-[#007AFF] font-medium hover:underline">
-                  Learn more <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-          </StaggeredGrid>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="w-full py-32 px-6">
-        <div className="max-w-6xl mx-auto">
-          <AnimatedSection animation="slideUp">
-            <h3 className="text-5xl font-bold text-gray-900 text-center mb-20 tracking-tight">
-              Crafted for Connection
-            </h3>
-          </AnimatedSection>
-          
-          <StaggeredGrid 
-            className="grid grid-cols-1 md:grid-cols-3 gap-16"
-            staggerDelay={0.2}
-          >
-            {/* Psychology-Based Design */}
-            <div className="text-center">
-              <div className="w-16 h-16 bg-[#007AFF] rounded-2xl flex items-center justify-center mx-auto mb-8 transform transition-transform duration-300 hover:scale-110">
-                <Brain className="h-8 w-8 text-white" />
-              </div>
-              <h4 className="text-2xl font-semibold text-gray-900 mb-4">
-                Psychology-Based Design
-              </h4>
-              <p className="text-lg text-gray-600 font-light leading-relaxed">
-                Every message crafted with positive psychology principles.
-              </p>
-            </div>
-
-            {/* Premium Materials */}
-            <div className="text-center">
-              <div className="w-16 h-16 bg-[#007AFF] rounded-2xl flex items-center justify-center mx-auto mb-8 transform transition-transform duration-300 hover:scale-110">
-                <Leaf className="h-8 w-8 text-white" />
-              </div>
-              <h4 className="text-2xl font-semibold text-gray-900 mb-4">
-                Premium Materials
-              </h4>
-              <p className="text-lg text-gray-600 font-light leading-relaxed">
-                Sustainable, high-quality printing that feels amazing.
-              </p>
-            </div>
-
-            {/* Made for America */}
-            <div className="text-center">
-              <div className="w-16 h-16 bg-[#007AFF] rounded-2xl flex items-center justify-center mx-auto mb-8 transform transition-transform duration-300 hover:scale-110">
-                <Heart className="h-8 w-8 text-white" />
-              </div>
-              <h4 className="text-2xl font-semibold text-gray-900 mb-4">
-                Made for America
-              </h4>
-              <p className="text-lg text-gray-600 font-light leading-relaxed">
-                Designed specifically for US holidays and culture.
-              </p>
-            </div>
-          </StaggeredGrid>
-        </div>
-      </section>
-
-      {/* Email Collection */}
-      <section className="w-full py-32 px-6 bg-gray-50">
-        <div className="max-w-2xl mx-auto">
-          <AnimatedSection animation="scaleIn">
-            <div className="bg-white rounded-3xl p-16 shadow-xl text-center">
-              <h3 className="text-4xl font-bold text-gray-900 mb-6 tracking-tight">
-                Be the first to experience JoyCards.
-              </h3>
-              <p className="text-xl text-gray-600 mb-12 font-light">
-                Join our community and get 20% off at launch.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto mb-6">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 rounded-full border-gray-300 px-6 py-3 text-lg focus:border-[#007AFF] focus:ring-[#007AFF]"
-                />
-                <Button className="bg-[#007AFF] hover:bg-[#0056CC] text-white rounded-full px-8 py-3 text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-200">
-                  Sign Up
-                </Button>
-              </div>
-              
-              <p className="text-sm text-gray-500 font-light">
-                We respect your privacy.
-              </p>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="w-full py-16 px-6">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="mb-8">
-            <h4 className="text-2xl font-semibold text-gray-900 mb-2">JoyCards</h4>
-            <p className="text-gray-600 font-light">Building something beautiful.</p>
-          </div>
-          
-          <div className="flex flex-wrap justify-center gap-8 mb-8 text-sm text-gray-500">
-            <Link href="#" className="hover:text-gray-700 transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-gray-700 transition-colors">Terms of Service</Link>
-            <Link href="#" className="hover:text-gray-700 transition-colors">Contact</Link>
-          </div>
-          
-          <p className="text-sm text-gray-400">
-            © {new Date().getFullYear()} JoyCards. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      {/* Content */}
+      <main className={`transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+        {renderContent()}
+      </main>
     </div>
   )
 }
