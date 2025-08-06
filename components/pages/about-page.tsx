@@ -98,7 +98,7 @@ export default function AboutPage() {
               <div className="relative">
                 <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
                   <Image
-                    src="/placeholder.svg?height=600&width=480&text=Founder+Photo"
+                    src="/FounderPhoto.png"
                     alt="Founder"
                     width={480}
                     height={600}
@@ -194,7 +194,7 @@ export default function AboutPage() {
                   <div className={index % 2 === 1 ? 'lg:col-start-1' : ''}>
                     <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
                       <Image
-                        src={`/placeholder_image.png?height=400&width=500&text=${step.title}+Process`}
+                        src={`/${step.title}Process.png`}
                         alt={`${step.title} Process`}
                         width={500}
                         height={400}

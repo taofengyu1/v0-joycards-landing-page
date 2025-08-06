@@ -11,7 +11,7 @@ export default function ProductsPage() {
       collection: "Back to School Collection",
       price: "$24.99 - 8 cards",
       availability: "Available Fall 2024",
-      image: "/placeholder.svg?height=400&width=300&text=Scholar+Sam",
+      image: "/ScholarSam.png",
       gradient: "from-blue-100 to-blue-200"
     },
     {
@@ -20,7 +20,7 @@ export default function ProductsPage() {
       collection: "Thanksgiving Collection",
       price: "$24.99 - 8 cards",
       availability: "Available November 2024",
-      image: "/placeholder.svg?height=400&width=300&text=Gratitude+Series",
+      image: "/GratitudeSeries.png",
       gradient: "from-orange-100 to-orange-200",
       badge: "New"
     },
@@ -30,7 +30,7 @@ export default function ProductsPage() {
       collection: "Holiday Collection",
       price: "$29.99 - 10 cards",
       availability: "Available December 2024",
-      image: "/placeholder.svg?height=400&width=300&text=Festive+Joy",
+      image: "/FestiveJoy.png",
       gradient: "from-red-100 to-red-200"
     },
     {
@@ -39,7 +39,7 @@ export default function ProductsPage() {
       collection: "New Year Collection",
       price: "$19.99 - 6 cards",
       availability: "Available January 2025",
-      image: "/placeholder.svg?height=400&width=300&text=Fresh+Start",
+      image: "/FreshStartSeries.png",
       gradient: "from-purple-100 to-purple-200"
     }
   ]

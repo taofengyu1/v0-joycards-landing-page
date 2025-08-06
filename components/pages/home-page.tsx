@@ -29,10 +29,10 @@ export default function HomePage() {
             <div className="relative mb-16">
               <div className="grid grid-cols-2 md:grid-cols-3 gap-8 max-w-2xl mx-auto">
                 <div className="transform rotate-3 hover:rotate-6 transition-transform duration-300">
-                  <div className="bg-gradient-to-br from-red-100 to-red-200 rounded-2xl p-8 shadow-2xl aspect-[3/4]">
+                  <div className="bg-gradient-to-br from-pink-100 to-pink-200 rounded-2xl p-8 shadow-2xl aspect-[3/4]">
                     <Image
-                      src="/placeholder.svg?height=300&width=200&text=Holiday+Card"
-                      alt="Holiday Card"
+                      src="/JoyCards_1.png"
+                      alt="JoyCards - You Matter Collection"
                       width={200}
                       height={300}
                       className="w-full h-full object-cover rounded-lg"
@@ -40,10 +40,10 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="transform -rotate-2 hover:rotate-1 transition-transform duration-300 md:mt-8">
-                  <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-2xl p-8 shadow-2xl aspect-[3/4]">
+                  <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl p-8 shadow-2xl aspect-[3/4]">
                     <Image
-                      src="/placeholder.svg?height=300&width=200&text=Thanksgiving+Card"
-                      alt="Thanksgiving Card"
+                      src="/JoyCards_2.png"
+                      alt="JoyCards - Keep Shining Collection"
                       width={200}
                       height={300}
                       className="w-full h-full object-cover rounded-lg"
@@ -53,8 +53,8 @@ export default function HomePage() {
                 <div className="transform rotate-1 hover:-rotate-2 transition-transform duration-300 col-span-2 md:col-span-1">
                   <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl p-8 shadow-2xl aspect-[3/4]">
                     <Image
-                      src="/placeholder.svg?height=300&width=200&text=New+Year+Card"
-                      alt="New Year Card"
+                      src="/JoyCards_3.png"
+                      alt="JoyCards - Fresh Start Collection"
                       width={200}
                       height={300}
                       className="w-full h-full object-cover rounded-lg"
@@ -98,7 +98,7 @@ export default function HomePage() {
               <div className="bg-white rounded-3xl p-12 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="aspect-[4/3] mb-8 relative overflow-hidden rounded-2xl">
                   <Image
-                    src="/placeholder.svg?height=300&width=400&text=Back+to+School"
+                    src="/BacktoSchool.png"
                     alt="Back to School Collection"
                     width={400}
                     height={300}
@@ -124,7 +124,7 @@ export default function HomePage() {
                 </div>
                 <div className="aspect-[4/3] mb-8 relative overflow-hidden rounded-2xl">
                   <Image
-                    src="/placeholder.svg?height=300&width=400&text=Thanksgiving"
+                    src="/Thanksgiving.png"
                     alt="Thanksgiving Collection"
                     width={400}
                     height={300}
@@ -147,7 +147,7 @@ export default function HomePage() {
               <div className="bg-white rounded-3xl p-12 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="aspect-[4/3] mb-8 relative overflow-hidden rounded-2xl">
                   <Image
-                    src="/placeholder.svg?height=300&width=400&text=Holiday"
+                    src="/Holiday.png"
                     alt="Holiday Collection"
                     width={400}
                     height={300}
@@ -170,7 +170,7 @@ export default function HomePage() {
               <div className="bg-white rounded-3xl p-12 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="aspect-[4/3] mb-8 relative overflow-hidden rounded-2xl">
                   <Image
-                    src="/placeholder.svg?height=300&width=400&text=New+Year"
+                    src="/NewYear.png"
                     alt="New Year Collection"
                     width={400}
                     height={300}
